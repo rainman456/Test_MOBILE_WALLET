@@ -29,7 +29,7 @@ class UserProfile(AbstractUser):
     first_name = models.CharField(verbose_name='First Name', max_length=50)      
     last_name = models.CharField(verbose_name='Last Name', max_length=50)
     email = models.EmailField(verbose_name='Email Address', unique=True)
-    country = CountryField(null=True, blank=True, blank_label='Country')
+    country = CountryField( blank=True, blank_label='Country')
     phone_number = PhoneNumberField(blank=True)
     username = None
     date_joined = models.DateTimeField(default=timezone.now)
