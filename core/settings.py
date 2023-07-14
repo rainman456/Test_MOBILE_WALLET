@@ -59,7 +59,7 @@ THIRD_PARTY_APPS = [
 ]
    
 LOCAL_APPS = [
-    'apps.users.apps.UsersConfig',
+    'users.apps.UsersConfig',
     
 ]
 
