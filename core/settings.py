@@ -59,7 +59,7 @@ THIRD_PARTY_APPS = [
 ]
    
 LOCAL_APPS = [
-    'apps.users.apps.UsersConfig',
+    'users.apps.UsersConfig',
     
 ]
 
@@ -171,8 +171,10 @@ LOG_LEVEL = "INFO"
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/staticfiles/'
-STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIR = []
+STATIC_ROOT = BASE_DIR .joinpath('static')
+STATICFILES_DIR = [
+     BASE_DIR .joinpath('static')
+]
 MEDIA_URL = '/mediafiles/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
