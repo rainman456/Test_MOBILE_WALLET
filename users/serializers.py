@@ -14,7 +14,6 @@ class CreateUser(UserCreateSerializer):
 
     class Meta(UserCreateSerializer.Meta):
         model = UserProfile
-        country=CountryField()
         fields = ('id','last_name', 'email', 'first_name', 'password', 'country', 'phone_number')
 
         
@@ -22,7 +21,6 @@ class CreateUser(UserCreateSerializer):
 class UserCurrent(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = UserProfile
-        country=CountryField()
         fields = [ 'id','last_name', 'email', 'first_name', 'password', 'country', 'phone_number']
 
 
