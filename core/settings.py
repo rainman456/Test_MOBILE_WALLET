@@ -223,13 +223,13 @@ DJOSER = {
     'ACTIVATION_URL': 'api/v1/auth/users/activate/',
     'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {
-        'user_create': 'apps.users.serializers.CreateUser',
-        'user_login': 'apps.users.serializers.LoginSerializer',
-        'current_user': 'apps.users.serializers.UserCurrent',   
+        'user_create': 'users.serializers.CreateUser',
+        'user_login': 'users.serializers.LoginSerializer',
+        'current_user': 'users.serializers.UserCurrent',   
         #'delete_user': 'djoser.serializers.UserDeleteSerializer',
-        #'activate': 'apps.users.serializers.OTPActivate',
-        'password_reset': 'apps.users.serializers.SendOTPPasswordReset',
-        'password_reset_confirm': 'apps.users.serializers.PasswordResetConfirm',
+        #'activate': 'users.serializers.OTPActivate',
+        'password_reset': 'users.serializers.SendOTPPasswordReset',
+        'password_reset_confirm': 'users.serializers.PasswordResetConfirm',
 
     }
 }
