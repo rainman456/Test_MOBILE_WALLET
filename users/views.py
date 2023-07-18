@@ -44,7 +44,7 @@ class CustomUserViewSet(UserViewSet):
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
-            return Response(reg_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(serializer.errors,status=400)
 
 
 class ActivateView(APIView):        
