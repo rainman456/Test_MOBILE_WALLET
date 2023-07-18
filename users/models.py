@@ -34,7 +34,7 @@ class UserProfile(AbstractUser):
     phone_number = PhoneNumberField(blank=True)
     username = None
     date_joined = models.DateTimeField(default=timezone.now)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
    
 
 
