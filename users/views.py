@@ -34,16 +34,17 @@ class CustomUserViewSet(UserViewSet):
         if serializer.is_valid():
             user=serializer.save()
             if user:
-                send_mail('OTP Code',# Send OTP code via email
-                f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
-                [serializer.validated_data['email']],fail_silently=False,)
+                user.is_active = True
+                #send_mail('OTP Code',# Send OTP code via email
+                #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
+                #[serializer.validated_data['email']],fail_silently=False,)
                 data={'detail': 'User created successfully. OTP code sent.',
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
             return Response(reg_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-
+"""
 class ActivateView(APIView):        
     serializer_class=OTPActivate
     @swagger_auto_schema(request_body=OTPActivate)
@@ -68,7 +69,7 @@ class ActivateView(APIView):
                 return JsonResponse({'detail': 'Account activated successfully.'},status=200)
             else:
                 return JsonResponse({'detail': 'Invalid OTP code.'}, status=400)
-
+"""
 
 
 class OTPResendView(APIView):
