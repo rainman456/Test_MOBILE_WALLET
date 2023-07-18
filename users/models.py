@@ -35,7 +35,8 @@ class UserProfile(AbstractUser):
     username = None
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
-   
+    is_staff = models.BooleanField(default=True)
+
 
 
 
