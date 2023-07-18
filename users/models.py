@@ -20,6 +20,7 @@ class CustomManager(BaseUserManager):
         user = self.create_user(email, password=password, **extra_fields)
         user.is_staff = True
         user.is_superuser = True
+        user.is_active = True
         user.save(using=self._db)
         return user
 
@@ -29,7 +30,7 @@ class UserProfile(AbstractUser):
     first_name = models.CharField(verbose_name='First Name', max_length=50)      
     last_name = models.CharField(verbose_name='Last Name', max_length=50)
     email = models.EmailField(verbose_name='Email Address', unique=True)
-    country = CountryField( blank=True, blank_label='Country')
+    country = CountryField(default='NG',blank=True, blank_label='Country')
     phone_number = PhoneNumberField(blank=True)
     username = None
     date_joined = models.DateTimeField(default=timezone.now)
@@ -40,7 +41,7 @@ class UserProfile(AbstractUser):
 
     objects=CustomManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["first_name","last_name","country","phone_number"]
+    REQUIRED_FIELDS = []
     class Meta:
         ordering=['date_joined']
 
