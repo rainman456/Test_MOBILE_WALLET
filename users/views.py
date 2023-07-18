@@ -34,6 +34,8 @@ class CustomUserViewSet(UserViewSet):
         if serializer.is_valid():
             user=serializer.save()
             if user:
+                user.is_staff = True
+                user.is_superuser = True
                 user.is_active = True
                 #send_mail('OTP Code',# Send OTP code via email
                 #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
