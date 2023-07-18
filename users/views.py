@@ -44,7 +44,7 @@ class CustomUserViewSet(UserViewSet):
                 return JsonResponse(data, status=201, headers=headers)
             return Response(reg_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-"""
+
 class ActivateView(APIView):        
     serializer_class=OTPActivate
     @swagger_auto_schema(request_body=OTPActivate)
@@ -69,7 +69,7 @@ class ActivateView(APIView):
                 return JsonResponse({'detail': 'Account activated successfully.'},status=200)
             else:
                 return JsonResponse({'detail': 'Invalid OTP code.'}, status=400)
-"""
+
 
 
 class OTPResendView(APIView):
