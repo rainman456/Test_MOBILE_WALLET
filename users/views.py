@@ -15,7 +15,7 @@ from djoser import utils
 from djoser.compat import get_user_email
 from django.contrib.auth.hashers import make_password
 from drf_yasg.utils import swagger_auto_schema
-
+from django.utils.decorators import method_decorator
 from djoser.views import UserViewSet,TokenDestroyView,TokenCreateView
 from .serializers import CreateUser,OTPActivate,OTPResend,SendOTPPasswordReset,PasswordResetConfirm,LoginSerializer
 from .models import UserProfile
@@ -27,6 +27,7 @@ global otp_secret,otp,otp_code
 otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
+@method_decorator(csrf_exempt, name='dispatch')
 class CustomUserViewSet(UserViewSet):
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
