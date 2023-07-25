@@ -34,7 +34,7 @@ class CustomUserViewSet(UserViewSet):
         serializer = CreateUser(data=request.data)
         print (serializer)
         print (serializer.is_valid())
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             user=serializer.save()
             if user:
                 user.is_staff = True
