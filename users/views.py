@@ -32,6 +32,7 @@ class CustomUserViewSet(UserViewSet):
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
         serializer = CreateUser(data=request.data)
+        print (serializer)
         print (serializer.is_valid())
         if serializer.is_valid():
             user=serializer.save()
