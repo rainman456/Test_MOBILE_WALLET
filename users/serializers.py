@@ -11,16 +11,16 @@ from .models import UserProfile
 
 
 class CreateUser(UserCreateSerializer):
-
     class Meta(UserCreateSerializer.Meta):
         model = UserProfile
-        fields = ('id','last_name', 'email', 'first_name', 'password', 'country', 'phone_number')
+        fields = ["last_name", "email", "first_name", "password", "country", "phone_number"]
 
         
 
 class UserCurrent(UserSerializer):
     class Meta(UserSerializer.Meta):
         model = UserProfile
+        country=CountryField()
         fields = [ 'id','last_name', 'email', 'first_name', 'password', 'country', 'phone_number']
 
 

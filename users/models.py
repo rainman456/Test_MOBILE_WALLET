@@ -25,18 +25,18 @@ class CustomManager(BaseUserManager):
         return user
 
 
-
 class UserProfile(AbstractUser):
     id = models.AutoField(primary_key=True, editable=False, unique=True)
     first_name = models.CharField(verbose_name='First Name', max_length=50)      
     last_name = models.CharField(verbose_name='Last Name', max_length=50)
     email = models.EmailField(verbose_name='Email Address', unique=True)
-    country = CountryField(null=True, blank=True, blank_label='Country')
-    phone_number = PhoneNumberField(blank=True)
+    country = CountryField( default='NG',blank=True, blank_label='Country')
+    phone_number =models.CharField(verbose_name='Phone Number', max_length=50)
     username = None
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=False)
-   
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
 
 
@@ -48,9 +48,4 @@ class UserProfile(AbstractUser):
 
     
     def __str__(self):
-        return self.first_name
-"""
-    def save(self, *args, **kwargs):
-        self.set_password(self.password)
-        super().save()
-"""
+        return self.first_name + " " + self.last_name

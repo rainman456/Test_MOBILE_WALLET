@@ -8,6 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework.views import APIView
@@ -15,7 +16,6 @@ from djoser import utils
 from djoser.compat import get_user_email
 from django.contrib.auth.hashers import make_password
 from drf_yasg.utils import swagger_auto_schema
-
 from djoser.views import UserViewSet,TokenDestroyView,TokenCreateView
 from .serializers import CreateUser,OTPActivate,OTPResend,SendOTPPasswordReset,PasswordResetConfirm,LoginSerializer
 from .models import UserProfile
@@ -27,31 +27,31 @@ global otp_secret,otp,otp_code
 otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
+#@method_decorator(csrf_exempt,name='dispatch')
 class CustomUserViewSet(UserViewSet):
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
         serializer = CreateUser(data=request.data)
-        if serializer.is_valid():
+        print(serializer)
+        print(request.data)
+        print(serializer.is_valid())
+        if serializer.is_valid(raise_exception=True):
             user=serializer.save()
             if user:
-                user.is_active = True
-               # send_mail('OTP Code',# Send OTP code via email
-                #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
-                #[serializer.validated_data['email']],fail_silently=False,)
                 data={'detail': 'User created successfully. OTP code sent.',
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
-            return Response(reg_serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse(serializer.errors,status=400)
 
-"""
+
 class ActivateView(APIView):        
     serializer_class=OTPActivate
     @swagger_auto_schema(request_body=OTPActivate)
 
     def post(self, request):
         serializer=OTPActivate(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             otp_c = serializer.validated_data['otp_code']
             user_id = serializer.validated_data['user_id']
             #request.session['otp_code']=otp_c
@@ -69,7 +69,7 @@ class ActivateView(APIView):
                 return JsonResponse({'detail': 'Account activated successfully.'},status=200)
             else:
                 return JsonResponse({'detail': 'Invalid OTP code.'}, status=400)
-"""
+
 
 
 class OTPResendView(APIView):
@@ -78,7 +78,7 @@ class OTPResendView(APIView):
 
     def post(self, request):
         serializer=OTPResend(data=request.data)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             try:
                 user_id = serializer.validated_data['user_id']
                 user=UserProfile.objects.get(id=user_id)
