@@ -20,25 +20,17 @@ public=True
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
+<<<<<<< HEAD
     path('', include('transactions.urls')),
     path('', include('userwallets.urls')),
     path('', include('payments_app.urls')),
+=======
+>>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('swagger.json/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-   
-   
-   # YOUR PATTERNS
-    #path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    # Optional UI:
-    #path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    #path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
-] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+]
+urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

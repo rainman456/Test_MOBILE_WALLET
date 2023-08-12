@@ -60,11 +60,14 @@ THIRD_PARTY_APPS = [
    
 LOCAL_APPS = [
     'users.apps.UsersConfig',
+<<<<<<< HEAD
     'transactions.apps.TransactionsConfig',
     'userwallets.apps.UserWalletConfig',
     'payments_app.apps.PaymentsAppConfig',
     
 
+=======
+>>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
     
 ]
 
@@ -175,9 +178,11 @@ LOG_LEVEL = "INFO"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
-STATIC_URL = '/staticfiles/'
-STATIC_ROOT = BASE_DIR / 'static'
-STATICFILES_DIR = []
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR .joinpath('static')
+STATICFILES_DIR = [
+     BASE_DIR .joinpath('static')
+]
 MEDIA_URL = '/mediafiles/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
@@ -226,13 +231,13 @@ DJOSER = {
     'ACTIVATION_URL': 'api/v1/auth/users/activate/',
     'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {
-        'user_create': 'apps.users.serializers.CreateUser',
-        'user_login': 'apps.users.serializers.LoginSerializer',
-        'current_user': 'apps.users.serializers.UserCurrent',   
+        'user_create': 'users.serializers.CreateUser',
+        'user_login': 'users.serializers.LoginSerializer',
+        'current_user': 'users.serializers.UserCurrent',   
         #'delete_user': 'djoser.serializers.UserDeleteSerializer',
-        #'activate': 'apps.users.serializers.OTPActivate',
-        'password_reset': 'apps.users.serializers.SendOTPPasswordReset',
-        'password_reset_confirm': 'apps.users.serializers.PasswordResetConfirm',
+        #'activate': 'users.serializers.OTPActivate',
+        'password_reset': 'users.serializers.SendOTPPasswordReset',
+        'password_reset_confirm': 'users.serializers.PasswordResetConfirm',
 
     }
 }

@@ -20,7 +20,11 @@ class CustomManager(BaseUserManager):
         user = self.create_user(email, password, **extra_fields)
         user.is_staff = True
         user.is_superuser = True
+<<<<<<< HEAD
         user.is_active=True
+=======
+        user.is_active = True
+>>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
         user.save(using=self._db)
         return user
 
@@ -30,6 +34,7 @@ class UserProfile(AbstractUser):
     first_name = models.CharField(verbose_name='First Name', max_length=50)      
     last_name = models.CharField(verbose_name='Last Name', max_length=50)
     email = models.EmailField(verbose_name='Email Address', unique=True)
+<<<<<<< HEAD
     country = CountryField( default='NG',blank=True, blank_label='Country')
     phone_number =models.CharField(verbose_name='Phone Number', max_length=50)
     username = None
@@ -37,6 +42,16 @@ class UserProfile(AbstractUser):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+=======
+    country = CountryField(default='NG',blank=True, blank_label='Country')
+    phone_number = models.CharField(verbose_name='Phone Number',max_length=50)
+    username = None
+    date_joined = models.DateTimeField(default=timezone.now)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=True)
+
+>>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
 
 
 
@@ -48,4 +63,13 @@ class UserProfile(AbstractUser):
 
     
     def __str__(self):
+<<<<<<< HEAD
         return self.first_name + " " + self.last_name
+=======
+        return self.first_name
+"""
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+        super().save()
+"""
+>>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
