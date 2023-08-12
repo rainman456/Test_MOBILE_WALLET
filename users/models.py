@@ -17,11 +17,13 @@ class CustomManager(BaseUserManager):
         return account 
 
     def create_superuser(self, email, password, **extra_fields):
-        user = self.create_user(email, password=password, **extra_fields)
+        user = self.create_user(email, password, **extra_fields)
         user.is_staff = True
         user.is_superuser = True
+        user.is_active=True
         user.save(using=self._db)
         return user
+
 
 
 class UserProfile(AbstractUser):
@@ -40,7 +42,7 @@ class UserProfile(AbstractUser):
 
     objects=CustomManager()
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ["first_name","last_name","country","phone_number"]
+    REQUIRED_FIELDS = []
     class Meta:
         ordering=['date_joined']
 

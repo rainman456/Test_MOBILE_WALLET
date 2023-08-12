@@ -19,7 +19,10 @@ public=True
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('apps.users.urls')),
+    path('', include('users.urls')),
+    path('', include('transactions.urls')),
+    path('', include('userwallets.urls')),
+    path('', include('payments_app.urls')),
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

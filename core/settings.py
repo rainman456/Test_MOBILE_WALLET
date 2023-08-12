@@ -21,7 +21,7 @@ SECRET_KEY = 'django-insecure-w28xn9_7%3g)#5%ryms3yuzq1jj-9%^6u2g1&l&g)#od23)a%n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 #env('ALLOWED_HOSTS').split(' ')
 
 
@@ -59,7 +59,12 @@ THIRD_PARTY_APPS = [
 ]
    
 LOCAL_APPS = [
-    'apps.users.apps.UsersConfig',
+    'users.apps.UsersConfig',
+    'transactions.apps.TransactionsConfig',
+    'userwallets.apps.UserWalletConfig',
+    'payments_app.apps.PaymentsAppConfig',
+    
+
     
 ]
 
@@ -238,14 +243,6 @@ ANYMAIL={
 }
 
 """
-SPECTACULAR_SETTINGS = {
-    'TITTLE': 'Vail Wallet API  ',
-    'DESCRIPTION': 'Endpoints for user registration ,login and authentication',
-    'VERSION': '1.0.0',
-    'SWAGGER_UI_DIST': 'SIDECAR',  # shorthand to use the sidecar instead
-    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
-    'REDOC_DIST': 'SIDECAR',
-}
 
 SWAGGER_SETTINGS = {
 'DEFAULT_INFO': 'core.urls.api_info',
@@ -258,14 +255,14 @@ SWAGGER_SETTINGS = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 #EMAIL_BACKEND = 'elasticemail.backend.ElasticEmailBackend'
-DEFAULT_FROM_EMAIL='michaelstone897.com@gmail.com'
-EMAIL_HOST='smtp.elasticemail.com'
+#DEFAULT_FROM_EMAIL=''
+EMAIL_HOST='localhost'
 #EMAIL_FROM = ''
-MAIL_HOST_USER ='michaelstone897.com@gmail.com'
-EMAIL_HOST_USER_PASSWORD = 'A78187B038ED84B8D27B236AA79A27C81AC1'
-EMAIL_USE_TLS = True
+MAIL_HOST_USER ='localhost'
+EMAIL_HOST_USER_PASSWORD = ''
+EMAIL_USE_TLS = False
 EMAIL_USE_SSL = False
-EMAIL_PORT = 2525
+EMAIL_PORT = 1025
 DOMAIN =[]
 #env('DOMAIN')
 SITE_NAME = ''

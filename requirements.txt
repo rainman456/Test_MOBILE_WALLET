@@ -36,6 +36,7 @@ drf-yasg==1.21.6
 -e git+https://github.com/muepsilon/elasticemail-django@1dad468041bf0e4e9bf9ac8260fcbf95c8c58a22#egg=elasticemail_django
 flake8==3.9.2
 frozenlist==1.3.3
+gunicorn==20.0.3
 idna==3.4
 inflection==0.5.1
 isort==5.9.3
