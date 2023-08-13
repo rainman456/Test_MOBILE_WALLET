@@ -21,7 +21,7 @@ class GetTransactionsDetailsView(APIView):
     def get(self, request,user_id):
             try:
                 user=UserProfile.objects.get(id=user_id)
-                transaction=Transactions.objects.select_related('account').get(id=user_id)
+                transaction=owner=Transactions.objects.get(account=user)
             except Transactions.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user or not found '}, status=404)
             serializer=GetTransactionsDetails(transaction,many=true)
