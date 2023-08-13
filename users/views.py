@@ -35,6 +35,7 @@ class CustomUserViewSet(UserViewSet):
         print(serializer)
         print(request.data)
         print(serializer.is_valid())
+        print(serializer.errors)
         if serializer.is_valid(raise_exception=True):
             user=serializer.save()
             if user:
