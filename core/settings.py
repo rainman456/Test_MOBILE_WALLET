@@ -60,14 +60,9 @@ THIRD_PARTY_APPS = [
    
 LOCAL_APPS = [
     'users.apps.UsersConfig',
-<<<<<<< HEAD
     'transactions.apps.TransactionsConfig',
     'userwallets.apps.UserWalletConfig',
     'payments_app.apps.PaymentsAppConfig',
-    
-
-=======
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
     
 ]
 
