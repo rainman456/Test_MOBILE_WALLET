@@ -8,3 +8,10 @@ from userwallets.models import WalletStats
 def create_wallet(sender, created, instance, *args, **kwargs):
     if created:
         WalletStats.objects.create(owner=instance)
+
+
+@receiver(post_save, sender=User)
+def create_wallet(sender, created, instance, *args, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
