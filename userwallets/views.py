@@ -56,7 +56,7 @@ class GetVirtualAcnView(APIView):
                 }
                 payload_data=json.dumps(payload)
                 responses=requests.post(gateway_url,json=payload_data,headers=headers)
-                print(responses.text(),payload_data)
+                print(responses.json(),payload_data)
                
                 if responses.status_code == 200:
                     wdata=responses.content
