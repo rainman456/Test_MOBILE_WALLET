@@ -52,7 +52,7 @@ class GetVirtualAcnView(APIView):
                
                 if responses.status_code == 200:
                     wdata=responses.content
-                    current=(json.loads(wdata)
+                    current=(json.loads(wdata))
                     stat=current.get('status')
                     wid=current.get('_id')
                     virtualacn=current.get("accountNummber")
