@@ -28,25 +28,34 @@ otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
 #@method_decorator(csrf_exempt,name='dispatch')
-class CustomUserViewSet(UserViewSet):
+class CustomUserViewSet(APIView):
     serializer_class=CreateUser
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = CreateUser(data=request.data)
         print(serializer)
         print(request.data)
         print(serializer.is_valid())
         print(serializer.errors)
         if serializer.is_valid(raise_exception=True):
-            user=serializer.save()
-            if user:
-                #send_mail('OTP Code',# Send OTP code via email
-                #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
-                #[serializer.validated_data['email']],fail_silently=False
-                data={'detail': 'User created successfully. OTP code sent.',
-                'email':user.email,'id':user.id}
-                headers = self.get_success_headers(serializer.data)
-                return JsonResponse(data, status=201, headers=headers)
-        return JsonResponse(serializer.errors,status=400)
+            last_name = serializer.validated_data['last_name']
+            email = serializer.validated_data['email']
+            first_name = serializer.validated_data['first_name']
+            password = serializer.validated_data['password']
+            country = serializer.validated_data[country']
+            phone_number = serializer.validated_data['phone_number']
+            user= UserPofile.objects.create(
+                last_name=last_name,
+                email=email,
+                first_name=first_name,
+                password=password,
+                country=country,
+                phone_number=phone_number)
+            user.save()
+            data={'detail': 'User created successfully. OTP code sent.','email':user.email,'id':user.id}
+            headers = self.get_success_headers(serializer.data)
+            return JsonResponse(data, status=201, headers=headers)
+        else:
+            return JsonResponse(serializer.errors,status=400)
 
 class ActivateView(APIView):        
     serializer_class=OTPActivate
