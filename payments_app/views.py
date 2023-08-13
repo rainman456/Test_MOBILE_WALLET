@@ -280,7 +280,7 @@ class Webhook(APIView):
         webhook_secret_key=''
         payload=request.data
         key = webhook_secret_key.encode('utf-8')
-        message=json.dumps(payload,separators(',',':').encode('utf-8'))
+        message=json.dumps(payload)
         encrypted_data=hmac.new(key,message,hashlib.sha512).hexdigest()
         signature=request.headers.get('signature')
         if signature == encrypted_data:
