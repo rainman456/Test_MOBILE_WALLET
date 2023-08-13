@@ -48,18 +48,18 @@ class GetVirtualAcnView(APIView):
                 "KYCInformation":{"firstName":first_name, "lastName":last_name, "bvn":bvn},"channel":bank_name}
                 payload_data=json.dumps(payload)
                 responses=requests.post(gateway_url,json=payload_data,headers=headers)
+                print(responses.json())
                
                 if responses.status_code == 200:
-                    wdata=responses.data
-                    stat=wdata.get('status')
-                    wid=wdata.get('_id')
-                    if stat == "approved":
-                        virtualacn=webhook_data.get("accountNummber")
-                        owner.virtual_acn=virtualacn
-                        owner.wallet_id=wid
-                        owner.save()
-                    else:
-                        return Response({'error':"unable to get account number"},status=status.HTTP_400_BAD_REQUEST)
+                    wdata=responses.content
+                    current=(json.loads(wdata)
+                    stat=current.get('status')
+                    wid=current.get('_id')
+                    virtualacn=current.get("accountNummber")
+                    owner.virtual_acn=virtualacn
+                    owner.wallet_id=wid
+                    owner.save()
+                    return JsonResponse({'detail': 'Account number and id saved successfully'}, status=200)
                 else:
                     return Response({'error':"unable to get account number"},status=status.HTTP_400_BAD_REQUEST)
             except UserProfile.DoesNotExist:
