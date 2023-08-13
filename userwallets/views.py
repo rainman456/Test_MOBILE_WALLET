@@ -48,7 +48,7 @@ class GetVirtualAcnView(APIView):
                 "KYCInformation":{"firstName":first_name, "lastName":last_name, "bvn":bvn},"channel":bank_name}
                 payload_data=json.dumps(payload)
                 responses=requests.post(gateway_url,json=payload_data,headers=headers)
-                print(responses.json())
+                print(responses.json(),payload_data)
                
                 if responses.status_code == 200:
                     wdata=responses.content
