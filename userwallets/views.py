@@ -44,13 +44,19 @@ class GetVirtualAcnView(APIView):
                 headers={"accept":"application/json","content-type":"application/json",
                 "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"}
                 gateway_url="https://sandboxapi.fincra.com/profile/virtual-accounts/requests/"
-                payload={"currency":currency,"accountType":'individual',
-                         "KYCInformation":{"firstName":first_name, "lastName":last_name, "bvn":bvn},
-                         "channel":bank_name,
-                         "dateofBirth":date_of_birth.strftime('%d-%m-%Y')}
+                payload={
+                   "currency":currency,"accountType":'individual',
+                   "KYCInformation":{
+                      "firstName":first_name, 
+                      "lastName":last_name, 
+                      "bvn":bvn
+                   },
+                   "channel":bank_name,
+                   "dateofBirth":date_of_birth.strftime('%d-%m-%Y')
+                }
                 payload_data=json.dumps(payload)
                 responses=requests.post(gateway_url,json=payload_data,headers=headers)
-                print(responses.json(),payload_data)
+                print(responses.text(),payload_data)
                
                 if responses.status_code == 200:
                     wdata=responses.content
