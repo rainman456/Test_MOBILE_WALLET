@@ -27,7 +27,7 @@ global otp_secret,otp,otp_code
 otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
-@method_decorator(csrf_exempt,name='dispatch')
+#@method_decorator(csrf_exempt,name='dispatch')
 class CustomUserViewSet(UserViewSet):
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
@@ -38,9 +38,6 @@ class CustomUserViewSet(UserViewSet):
         if serializer.is_valid(raise_exception=True):
             user=serializer.save()
             if user:
-                user.is_staff = True
-                user.is_superuser = True
-                user.is_active = True
                 #send_mail('OTP Code',# Send OTP code via email
                 #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
                 #[serializer.validated_data['email']],fail_silently=False
@@ -48,7 +45,7 @@ class CustomUserViewSet(UserViewSet):
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
-            return JsonResponse(serializer.errors,status=400)
+        return JsonResponse(serializer.errors,status=400)
 
 class ActivateView(APIView):        
     serializer_class=OTPActivate
