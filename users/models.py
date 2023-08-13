@@ -31,8 +31,8 @@ class UserProfile(AbstractUser):
     first_name = models.CharField(verbose_name='First Name', max_length=50)      
     last_name = models.CharField(verbose_name='Last Name', max_length=50)
     email = models.EmailField(verbose_name='Email Address', unique=True)
-    country = CountryField( default='NG',blank=True, blank_label='Country')
-    phone_number =models.CharField(verbose_name='Phone Number', max_length=50)
+    country =  models.CharField(verbose_name='Country', max_length=10)
+    phone_number = models.CharField(verbose_name='Phone Number', max_length=50)
     username = None
     date_joined = models.DateTimeField(default=timezone.now)
     is_active = models.BooleanField(default=True)
