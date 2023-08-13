@@ -26,24 +26,25 @@ class GetVirtualAcnView(APIView):
         if serializer.is_valid(raise_exception=True):
             try:
                 #thepeer_instance=Thepeer('')
-                user_id=serializers.validated_data['user_id']
-                bvn=serializers.validated_data['bvn']
+                user_id=serializer.validated_data['user_id']
+                bvn=serializer.validated_data['bvn']
                 user=UserProfile.objects.get(id=user_id)
                 email=user.email
                 #test=thepeer_instance.index_user(user,email,email)
                 #peers_s=json.loads(test)
-                date_of_birth=serializers.validated_data['d_o_b']
-                first_name=serializers.validated_data['first_name']
-                last_name=serializers.validated_data['last_name']
-                bank_name=serializers.validated_data['bank_name']
-                owner=WalletStats.objects.select_related('account').get(id=user_id)
+                date_of_birth=serializer.validated_data['d_o_b']
+                first_name=serializer.validated_data['first_name']
+                last_name=serializer.validated_data['last_name']
+                bank_name=serializer.validated_data['bank_name']
+                owner=WalletStats.objects.get(owner=user)
+                currency="NGN"
                 #peer_ref=peers_s["reference"]
                 #owner.peer_ref=peer_ref
                 #owner.save()
                 headers={"accept":"application/json","content-type":"application/json",
-                "api-key":"giW6UPgKddYpfcYQgBaFnSn5kQVnt5R8"}
+                "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"}
                 gateway_url="https://sandboxapi.fincra.com/profile/virtual-accounts/requests/"
-                payload={"dateofBirth":date_of_birth,"accountType":'individual',"currency":currency,
+                payload={"dateofBirth":date_of_birth.strftime('%d-%m-%Y'),"accountType":'individual',"currency":currency,
                 "KYCInformation":{"firstName":first_name, "lastName":last_name, "bvn":bvn},"channel":bank_name}
                 payload_data=json.dumps(payload)
                 responses=requests.post(gateway_url,json=payload_data,headers=headers)
@@ -72,7 +73,7 @@ class GetAccountDetailsView(APIView):
     def get(self, request,user_id):
             try:
                 user=UserProfile.objects.get(id=user_id)
-                owner=WalletStats.objects.select_related('account').get(id=user_id)
+                owner=WalletStats.objects.get(owner=user)
             except WalletStats.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user or not found '}, status=404)
             serializer=GetAccountDetails(owner,many=True)
