@@ -41,7 +41,7 @@ class CustomUserViewSet(APIView):
             email = serializer.validated_data['email']
             first_name = serializer.validated_data['first_name']
             password = serializer.validated_data['password']
-            country = serializer.validated_data[country']
+            country = serializer.validated_data['country']
             phone_number = serializer.validated_data['phone_number']
             user= UserPofile.objects.create(
                 last_name=last_name,
