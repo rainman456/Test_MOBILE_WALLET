@@ -12,12 +12,12 @@ from PIL import Image
 
 class WalletStats(models.Model):
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    wallet_id = models.CharField(max_length=50)
+    wallet_id = models.CharField(max_length=50,default='x')
     is_disabled = models.BooleanField(default=False)
     #peer_ref=models.CharField(max_length=20)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     currency= models.CharField(max_length=6)
-    virtual_acn=models.CharField(max_length=20)
+    virtual_acn=models.CharField(max_length=20,default='x')
     created_at=models.DateTimeField(default=timezone.now)
     class Meta:
         verbose_name_plural="User Wallets"
