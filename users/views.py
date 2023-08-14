@@ -45,7 +45,7 @@ class CustomUserViewSet(UserViewSet):
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
-        return JsonResponse(serializer.errors,status=40
+        return JsonResponse(serializer.errors,status=400)
 
 class ActivateView(APIView):        
     serializer_class=OTPActivate
