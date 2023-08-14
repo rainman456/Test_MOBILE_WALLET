@@ -62,11 +62,11 @@ class GetVirtualAcnView(APIView):
                 print(responses.json())
                
                 if responses.status_code == 200:
-                    wdata=responses.content
-                    current=(json.loads(wdata))
-                    wid=current.get('_id')
-                    virtualacn=current.get('data')
+                    current=(json.loads(responses.json()))
+                    wid=current['_id']
+                    virtualacn=current['data']
                     print(virtualacn)
+                    print(wid)
                     #owner.virtual_acn=virtualacn
                     owner.wallet_id=wid
                     owner.save()
