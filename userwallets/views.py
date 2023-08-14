@@ -63,6 +63,7 @@ class GetVirtualAcnView(APIView):
                
                 if responses.status_code == 200:
                     current=json.loads(responses.text)
+                    print(current)
                     wid=current['_id']
                     virtualacn=current['data']
                     print(virtualacn)
