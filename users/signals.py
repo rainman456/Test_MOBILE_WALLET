@@ -11,9 +11,9 @@ def create_user(sender, created, instance, *args, **kwargs):
 
 
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=UserProfile)
 def create_wallet(sender, created, instance, *args, **kwargs):
     if created:
-        WalletStats.objects.create(owner=instance)
+        WalletStats.objects.create(owner=instance.owner)
 
 
