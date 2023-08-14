@@ -9,7 +9,7 @@ OTPResendView,OTPResetEmailView,ResetPasswordView)
 
 urlpatterns = [
     # User creation endpoint
-    path('api/v1/auth/users/create/', CustomUserViewSet.as_view(), name='user-create'),
+    path('api/v1/auth/users/create/', CustomUserViewSet.as_view({'post': 'create'}), name='user-create'),
     # OTP verification endpoint
     path('api/v1/auth/users/activate/', ActivateView.as_view(), name='user-activate'),
      # OTP resend endpoint
