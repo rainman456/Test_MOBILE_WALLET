@@ -41,11 +41,15 @@ class GetVirtualAcnView(APIView):
                 #peer_ref=peers_s["reference"]
                 #owner.peer_ref=peer_ref
                 #owner.save()
-                headers={"accept":"application/json","content-type":"application/json",
-                "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"}
+                headers={
+                   "accept":"application/json",
+                   "content-type":"application/json",
+                   "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"
+                }
                 gateway_url="https://sandboxapi.fincra.com/profile/virtual-accounts/requests/"
                 payload={
-                   "currency":currency,"accountType":'individual',
+                   "currency":currency,
+                   "accountType":'individual',
                    "KYCInformation":{
                       "firstName":first_name, 
                       "lastName":last_name, 
@@ -82,12 +86,12 @@ class GetAccountDetailsView(APIView):
             try:
                 user=UserProfile.objects.get(id=user_id)
                 owner=WalletStats.objects.get(owner=user)
-            except WalletStats.DoesNotExist:
+            except UserProfile.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user or not found '}, status=404)
             serializer=GetAccountDetails(owner)
             response_data={
                 'message':f'Account Details of {user}',
-                'transactions':serializer.data}
+                'Account':serializer.data}
             return JsonResponse(response_data,status=200)
 
 
