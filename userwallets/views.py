@@ -72,7 +72,7 @@ class GetVirtualAcnView(APIView):
                     owner.save()
                     return JsonResponse({'detail': 'Account number and id saved successfully'}, status=200)
                 else:
-                    return Response({'error':"unable to get account number"},status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'error':"unable to get account number due to:",response.json()},status=status.HTTP_400_BAD_REQUEST)
             except UserProfile.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user '}, status=400)
 
