@@ -10,10 +10,10 @@ from djoser.serializers import (UserCreateSerializer,
 from .models import UserProfile
 
 
-class CreateUser(UserCreateSerializer):
-    class Meta(UserCreateSerializer.Meta):
+class CreateUser(serializers.Serializer:
+    class Meta:
         model = UserProfile
-        fields = ["last_name", "email", "first_name", "password", "country", "phone_number"]
+        fields = ["first_name", "last_name", "email", "password", "country", "phone_number"]
 
 
         
