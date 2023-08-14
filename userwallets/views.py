@@ -58,8 +58,8 @@ class GetVirtualAcnView(APIView):
                    "channel":bank_name,
                    "dateofBirth":date_of_birth.strftime('%d-%m-%Y')
                 }
-                payload_data=json.dumps(payload)
-                responses=requests.post(gateway_url,json=payload_data,headers=headers)
+                #payload_data=json.dumps(payload)
+                responses=requests.post(gateway_url,json=payload,headers=headers)
                 print(responses.json(),payload_data)
                
                 if responses.status_code == 200:
