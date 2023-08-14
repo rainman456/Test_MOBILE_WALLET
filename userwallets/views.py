@@ -32,7 +32,7 @@ class GetVirtualAcnView(APIView):
                 email=user.email
                 #test=thepeer_instance.index_user(user,email,email)
                 #peers_s=json.loads(test)
-                date_of_birth=serializer.validated_data['d_o_b']
+                #date_of_birth=serializer.validated_data['d_o_b']
                 first_name=serializer.validated_data['first_name']
                 last_name=serializer.validated_data['last_name']
                 bank_name=serializer.validated_data['bank_name']
@@ -55,8 +55,7 @@ class GetVirtualAcnView(APIView):
                       "lastName":last_name, 
                       "bvn":bvn
                    },
-                   "channel":bank_name,
-                   "dateofBirth":date_of_birth.strftime('%d-%m-%Y')
+                   "channel":bank_name
                 }
                 #payload_data=json.dumps(payload)
                 responses=requests.post(gateway_url,json=payload,headers=headers)
