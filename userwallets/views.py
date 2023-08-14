@@ -64,8 +64,8 @@ class GetVirtualAcnView(APIView):
                 if responses.status_code == 200:
                     wdata=responses.content
                     current=(json.loads(wdata))
-                    wid=current["_id"]
-                    virtualacn=current["data"]["accountNumber"]
+                    wid=current['_id']
+                    virtualacn=current['data']['accountNumber]
                     print(virtualacn)
                     owner.virtual_acn=virtualacn
                     owner.wallet_id=wid
