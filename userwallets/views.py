@@ -67,6 +67,7 @@ class GetVirtualAcnView(APIView):
                     stat=current.get('status')
                     wid=current.get('_id')
                     virtualacn=current.get("accountNummber")
+                    print(virtualacn)
                     owner.virtual_acn=virtualacn
                     owner.wallet_id=wid
                     owner.save()
