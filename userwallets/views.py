@@ -68,7 +68,7 @@ class GetVirtualAcnView(APIView):
                     virtualacn=current['data']['accountInformation']['accountNumber']
                     print(virtualacn)
                     print(wid)
-                    #owner.virtual_acn=virtualacn
+                    owner.virtual_acn=virtualacn
                     owner.wallet_id=wid
                     owner.save()
                     return JsonResponse({'detail': 'Account number and id saved successfully'}, status=200)
