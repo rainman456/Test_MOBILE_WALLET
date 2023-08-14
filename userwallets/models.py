@@ -12,7 +12,7 @@ from PIL import Image
 
 class WalletStats(models.Model):
     owner = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    wallet_id = models.CharField(max_length=50, unique=True)
+    wallet_id = models.CharField(max_length=50)
     is_disabled = models.BooleanField(default=False)
     #peer_ref=models.CharField(max_length=20)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
