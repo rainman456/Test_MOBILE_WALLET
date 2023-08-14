@@ -84,7 +84,7 @@ class GetAccountDetailsView(APIView):
                 owner=WalletStats.objects.get(owner=user)
             except WalletStats.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user or not found '}, status=404)
-            serializer=GetAccountDetails(owner,many=True)
+            serializer=GetAccountDetails(owner)
             response_data={
                 'message':f'Account Details of {user}',
                 'transactions':serializer.data}
