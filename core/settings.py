@@ -226,7 +226,7 @@ DJOSER = {
     'ACTIVATION_URL': 'api/v1/auth/users/activate/',
     'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CreateUser',
+        #'user_create': 'users.serializers.CreateUser',
         'user_login': 'users.serializers.LoginSerializer',
         'current_user': 'users.serializers.UserCurrent',   
         #'delete_user': 'djoser.serializers.UserDeleteSerializer',
