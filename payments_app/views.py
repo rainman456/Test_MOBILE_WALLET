@@ -36,7 +36,7 @@ class BankTransferView(APIView):
         if serializer.is_valid(raise_exception=True):
             try:
                 headers={"accept":"application/json",
-                "content-type":"application/json","api-key":"giW6UPgKddYpfcYQgBaFnSn5kQVnt5R8"}
+                "content-type":"application/json","api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"}
                 gateway_url="https://sandboxapi.fincra.com/disbursements/payouts"
                 user_id = serializer.validated_data['user_id']
                 user=UserProfile.objects.get(id=user_id)
@@ -64,7 +64,6 @@ class BankTransferView(APIView):
                          "accountHolderName":account_holder,"accountNumber":account_number,
                          "type":"individual",   "bankCode":bank_code}
                         }
-                payload_data=json.dumps(payload)
                 transfer=Transfers.objects.create(
                     transfer_type=transaction_type,
                     amount=new_amount,
@@ -77,8 +76,8 @@ class BankTransferView(APIView):
                     max_retry=5
                     delay_retry=2
                     for retry in range(max_retry):
-                        response=requests.post(gateway_url,json=payload_data,headers=headers)
-                        print(response.json)
+                        response=requests.post(gateway_url,json=payload,headers=headers)
+                        print(response.json())
                         if response == 200:
                             return JsonResponse({'detail': 'Transfer successful.'}, status=200)
                             owner.balance-=new_amount
@@ -105,7 +104,7 @@ class WalletTransferView(APIView):
        if serializer.is_valid(raise_exception=True):
         try:
             headers={"accept":"application/json","content-type":"application/json",
-            "api-key":"giW6UPgKddYpfcYQgBaFnSn5kQVnt5R8"}
+            "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"}
             gateway_url="https://sandboxapi.fincra.com/disbursements/payouts"
             user_id = serializer.validated_data['user_id']
             rec_id = serializer.validated_data['rec_id']
@@ -132,7 +131,6 @@ class WalletTransferView(APIView):
                 "beneficiary":{
                     "firstName":first_name, "lastName":last_name, "accountHolderName":recipient,
                     "accountNumber":account_number, "type":"individual",  "bankCode":bank_code}}
-            payload_data=json.dumps(payload)
             transfer=Transfers.objects.create(
                 transfer_type=transaction_type,
                 amount=new_amount,
@@ -145,7 +143,7 @@ class WalletTransferView(APIView):
                 max_retry=5
                 delay_retry=2
                 for retry in range(max_retry):
-                    print(response.json)
+                    print(response.json())
                     response=requests.post(gateway_url,json=payload_data,headers=headers)
                     if response == 200:
                         return JsonResponse({'detail': 'Transfer successful.'}, status=200)
@@ -217,7 +215,7 @@ class MobilePurchaseView(APIView):
         if serializer.is_valid(raise_exception=True):
             try:
                 headers={"accept":"application/json","content-type":"application/json",
-                "api-key":"giW6UPgKddYpfcYQgBaFnSn5kQVnt5R8"}
+                "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"}
                 gateway_url="http://52.210.49.22:8001/api/v1/vend_airtime"
                 user_id=serializer.validated_data['user_id']
                 network_name=serializer.validated_data['network_name']
@@ -277,7 +275,7 @@ class Webhook(APIView):
     import csv
 
     def post(self,request,*args,**kwargs):
-        webhook_secret_key=''
+        webhook_secret_key='90c02a4ae9a34a938d87f2dda3ec5da8'
         payload=request.data
         key = webhook_secret_key.encode('utf-8')
         message=json.dumps(payload)
@@ -285,11 +283,12 @@ class Webhook(APIView):
         signature=request.headers.get('signature')
         if signature == encrypted_data:
             webhook_data=request.data
-            event=webhook_data.get("event")
+            current=json.loads(webhook_data)
+            event=current["event"]
             if event == "collection.successful":
-                virtual_id=webhook_data.get("virtualAccount")
-                amount=float(webhook_data.get("amountReceived"))
-                name=webhook_data.get("customerName")
+                virtual_id= current["data"]["virtualAccount"]
+                amount=float(current["data"]["amountReceived"])
+                name=current["data"]["customerName"]
                 upate_view=DepositsView()
                 update_view.update(virtual_id,amount,name)
                 filename_3="webhook_Payins.csv"
@@ -299,8 +298,10 @@ class Webhook(APIView):
                     if csvfile3.tell==0:
                         csv_writer3.writeheader()
                     data_log3={
-                        'Account id':webhook_data.get("virtualAccount"),'Status':webhook_data.get("status"),
-                        'Payin Currency':webhook_data.get("destinationCurrency"),'Timestap':webhook_data.get("createdAt")}
+                        'Account id':virtual_id,
+                        'Status':current["data"]["status"],
+                        'Payin Currency': current["data"]["destinationCurrency"],
+                        'Timestap':current["data"]["createdAt"]}
                     csv_writer3.writerow(data_log3)
             if event == "payout.successful":
                 filename2="webhook_Accounts.csv"
@@ -310,11 +311,11 @@ class Webhook(APIView):
                     if csvfile.tell==0:
                         csv_writer.writeheader()
                     data_log={
-                        'Account':webhook_data.get("reference"),
-                        'id':webhook_data.get("id"),
-                        'Status':webhook_data.get("status"),
-                        'Currency':webhook_data.get("sourceCurrency"),
-                        'Timestap':webhook_data.get("createdAt")}
+                        'Account':current["data"]["reference"],
+                        'id':current["data"]["id"],
+                        'Status':current["data"]["status"],
+                        'Currency': current["data"]["sourceCurrency"],
+                        'Timestap':current["data"]["createdAt"]}
                     csv_writer.writerow(data_log)
             if event == "virtualaccount.approved":
                 filename3="webhook_Accounts.csv"
@@ -324,10 +325,10 @@ class Webhook(APIView):
                     if csvfile.tell==0:
                         csv_writer.writeheader()
                     data_log={
-                        'Account id':webhook_data.get("id"),
-                        'Status':webhook_data.get("status"),
-                        'Currency':webhook_data.get("currency"),
-                        'Timestap':webhook_data.get("createdAt")}
+                        'Account id'current["data"]["id"],
+                        'Status':current["data"]["status"],
+                        'Currency':current["data"]["currency"],
+                        'Timestap':current["data"]["createdAt"]}
                     csv_writer.writerow(data_log)              
         else:
             return Response({'error':"invalid signature"},status=status.HTTP_400_BAD_REQUEST)
