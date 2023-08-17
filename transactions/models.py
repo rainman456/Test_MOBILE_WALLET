@@ -43,7 +43,7 @@ class Transfers(models.Model):
     class Meta:
         verbose_name_plural="Transfers"
     def __str__(self):
-        return self.account.email
+        return self.sender.email
 
 class Mobile_TopUp(models.Model):
     account = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
