@@ -12,6 +12,7 @@ from .serializers import *
 from users.models import UserProfile
 from userwallets.models import WalletStats
 from transactions.models import Transactions,Deposits,Transfers,Mobile_TopUp
+from transactions.signals import create_transfer
 import requests
 import time
 import json
@@ -87,15 +88,17 @@ class BankTransferView(APIView):
                             return JsonResponse({'detail': 'Transfer successful.'}, status=200)
                             owner.balance-=new_amount
                             owner.save()
-                            #transaction.status='success'
-                            #transaction.save()
+                            transaction.status='success'
+                            transaction.save()
                         else:
                             return JsonResponse({'detail':'transfer errors'}, status=400)
-                            #transaction.status='failed'
-                            #transaction.save()
+                            transaction.status='failed'
+                            transaction.save()
                             time.sleep(delay_retry)
                 else:
                     return JsonResponse({'detail': 'insufficient funds.'}, status=400)
+                    transaction.status='failed'
+                    transaction.save()
             except UserProfile.DoesNotExist or bank_name not in codes:
                 return JsonResponse({'detail': 'Invalid user or bank.'}, status=400)
                 
