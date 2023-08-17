@@ -53,7 +53,7 @@ class BankTransferView(APIView):
                 account_holder= serializer.validated_data['account_holder']
                 first_name,last_name=account_holder.split()
                 recp_amount= serializer.validated_data['amount']
-                new_amount=float(rec_amount)
+                new_amount=float(recp_amount)
                 transaction=Transactions.objects.get(account=user)
                 owner=WalletStats.objects.get(owner=user)
                 available_balance=owner.balance
