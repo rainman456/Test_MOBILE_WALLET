@@ -54,7 +54,7 @@ class BankTransferView(APIView):
                 first_name,last_name=account_holder.split()
                 recp_amount= serializer.validated_data['amount']
                 new_amount=float(recp_amount)
-                transaction=Transactions.objects.get(account=user)
+                #transaction=Transactions.objects.get(account=user)
                 owner=WalletStats.objects.get(owner=user)
                 available_balance=owner.balance
                 transfer_type= serializer.validated_data['transfer_type']
@@ -87,12 +87,12 @@ class BankTransferView(APIView):
                             return JsonResponse({'detail': 'Transfer successful.'}, status=200)
                             owner.balance-=new_amount
                             owner.save()
-                            transaction.status='success'
-                            transaction.save()
+                            #transaction.status='success'
+                            #transaction.save()
                         else:
                             return JsonResponse({'detail':'transfer errors'}, status=400)
-                            transaction.status='failed'
-                            transaction.save()
+                            #transaction.status='failed'
+                            #transaction.save()
                             time.sleep(delay_retry)
                 else:
                     return JsonResponse({'detail': 'insufficient funds.'}, status=400)
