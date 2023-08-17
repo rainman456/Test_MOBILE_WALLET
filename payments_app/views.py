@@ -37,7 +37,7 @@ class BankTransferView(APIView):
             for line in doc:
                 lines = line.split()
                 if lines:
-                    codes.update({lines[0]:lines[1]})
+                    codes.update({lines[1]:lines[0]})
         serializer = BankTransfer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             try:
