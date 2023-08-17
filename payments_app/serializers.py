@@ -4,7 +4,6 @@ from rest_framework import serializers
 
 class BankTransfer(serializers.Serializer):
     user_id = serializers.IntegerField()
-    transfer_type=serializers.CharField()
     bank_name=serializers.CharField()
     bank_account_number=serializers.CharField()
     account_holder=serializers.CharField()
