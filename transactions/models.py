@@ -36,7 +36,7 @@ class Transfers(models.Model):
     transfer_type= models.CharField(choices=types,max_length=50)
     amount = models.DecimalField(max_digits=20, decimal_places=2)
     sender = models.ForeignKey(UserProfile ,related_name='sender',on_delete=models.CASCADE)
-    receiver = models.ForeignKey(UserProfile,related_name='receiver', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(UserProfile,related_name='receiver', on_delete=models.CASCADE,null=True)
     recipient =  models.CharField(max_length=50,default='x')
     bank_account_number = models.CharField(max_length=50)
     bank_name = models.CharField(max_length=50)
