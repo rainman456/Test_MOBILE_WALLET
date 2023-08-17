@@ -57,7 +57,7 @@ class BankTransferView(APIView):
                 #transaction=Transactions.objects.get(account=user)
                 owner=WalletStats.objects.get(owner=user)
                 available_balance=owner.balance
-                transfer_type= serializer.validated_data['transfer_type']
+                transfer_type='bank_transfer'
                 currency= serializer.validated_data['currency']
                 bank_code=codes[bank_name]
                 payload={ 
@@ -70,7 +70,7 @@ class BankTransferView(APIView):
                          "type":"individual",   "bankCode":bank_code}
                         }
                 transfer=Transfers.objects.create(
-                    transfer_type=transaction_type,
+                    transfer_type=transfer_type,
                     amount=new_amount,
                     sender=user,
                     bank_account_number=account_number,
