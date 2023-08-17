@@ -58,7 +58,7 @@ class BankTransferView(APIView):
                 owner=WalletStats.objects.get(owner=user)
                 available_balance=owner.balance
                 transfer_type= serializer.validated_data['transfer_type']
-                currency= serializer.validated_data[' currency']
+                currency= serializer.validated_data['currency']
                 bank_code=codes[bank_name]
                 payload={ 
                     "business":business_id ,"sourceCurrency":currency ,
