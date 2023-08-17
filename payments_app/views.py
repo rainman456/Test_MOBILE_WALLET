@@ -16,6 +16,9 @@ import requests
 import time
 import json
 import os
+import hmac
+import hashlib
+import csv
 #from thepeer import Thepeer
 # Create your views here.
 
@@ -44,7 +47,6 @@ class BankTransferView(APIView):
                 user_id = serializer.validated_data['user_id']
                 user=UserProfile.objects.get(id=user_id)
                 email=user.email
-                merch=serializer.save()
                 business_id="64033e4d9fc454765ab40e84"
                 bank_name= serializer.validated_data['bank_name']
                 account_number= serializer.validated_data['bank_account_number']
