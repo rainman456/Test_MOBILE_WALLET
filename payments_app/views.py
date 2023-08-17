@@ -15,6 +15,7 @@ from transactions.models import Transactions,Deposits,Transfers,Mobile_TopUp
 import requests
 import time
 import json
+import os
 #from thepeer import Thepeer
 # Create your views here.
 
@@ -26,7 +27,9 @@ class BankTransferView(APIView):
     serializer_class = BankTransfer
     @swagger_auto_schema(request_body=BankTransfer)
     def post(self, request):
-        with open('bankcodes.txt','r') as doc:
+        BASE_DIR=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        file_path=os.path.join(BASE_DIR,'bankcodes.txt')
+        with open(file_path,'r') as doc:
             codes={}
             for line in doc:
                 lines = line.split()
