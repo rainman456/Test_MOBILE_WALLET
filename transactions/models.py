@@ -62,7 +62,7 @@ class Transactions(models.Model):
     account = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     transaction_type = models.CharField(choices=TYPES,max_length=50)
     transaction_id = models.CharField(max_length=13, validators=[MinLengthValidator(13),
-    MaxLengthValidator(13)], default=generate_transaction_id,unique=True)
+    MaxLengthValidator(13)], default=generate_transaction_id)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     timestamp =  models.DateTimeField(default=timezone.now)
     recipient= models.CharField(max_length=60)
