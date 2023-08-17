@@ -325,7 +325,7 @@ class Webhook(APIView):
                     if csvfile.tell==0:
                         csv_writer.writeheader()
                     data_log={
-                        'Account id'current["data"]["id"],
+                        'Account id':current["data"]["id"],
                         'Status':current["data"]["status"],
                         'Currency':current["data"]["currency"],
                         'Timestap':current["data"]["createdAt"]}
