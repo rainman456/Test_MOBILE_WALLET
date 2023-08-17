@@ -21,7 +21,7 @@ SECRET_KEY = 'django-insecure-w28xn9_7%3g)#5%ryms3yuzq1jj-9%^6u2g1&l&g)#od23)a%n
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 #env('ALLOWED_HOSTS').split(' ')
 
 
@@ -60,14 +60,9 @@ THIRD_PARTY_APPS = [
    
 LOCAL_APPS = [
     'users.apps.UsersConfig',
-<<<<<<< HEAD
     'transactions.apps.TransactionsConfig',
     'userwallets.apps.UserWalletConfig',
     'payments_app.apps.PaymentsAppConfig',
-    
-
-=======
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
     
 ]
 
@@ -231,7 +226,7 @@ DJOSER = {
     'ACTIVATION_URL': 'api/v1/auth/users/activate/',
     'SEND_ACTIVATION_EMAIL': False,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CreateUser',
+        #'user_create': 'users.serializers.CreateUser',
         'user_login': 'users.serializers.LoginSerializer',
         'current_user': 'users.serializers.UserCurrent',   
         #'delete_user': 'djoser.serializers.UserDeleteSerializer',

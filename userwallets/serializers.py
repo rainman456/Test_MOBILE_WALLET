@@ -2,9 +2,9 @@ from rest_framework import serializers
 from .models import WalletStats
 
 class GetVirtualAcn(serializers.Serializer):
-    user_id=serializers.CharField()
+    user_id=serializers.IntegerField()
     bvn=serializers.CharField()
-    d_o_b=serializers.DateTimeField(format='%d/%m/%y')
+    #d_o_b=serializers.DateField(input_formats=['%d-%m-%Y'])
     first_name=serializers.CharField()
     last_name=serializers.CharField()
     bank_name=serializers.CharField()

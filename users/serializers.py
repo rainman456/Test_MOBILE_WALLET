@@ -13,11 +13,8 @@ from .models import UserProfile
 class CreateUser(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         model = UserProfile
-<<<<<<< HEAD
-        fields = ["last_name", "email", "first_name", "password", "country", "phone_number"]
-=======
-        fields = ['last_name', 'email', 'first_name', 'password', 'country', 'phone_number']
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
+        fields = ["first_name", "last_name", "email", "password", "country", "phone_number"]
+
 
         
 

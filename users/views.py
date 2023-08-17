@@ -1,4 +1,3 @@
-
 from django.core.mail import send_mail
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -28,11 +27,16 @@ global otp_secret,otp,otp_code
 otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
+<<<<<<< HEAD
 @method_decorator(csrf_exempt, name='dispatch')
+=======
+@method_decorator(csrf_exempt,name='dispatch')
+>>>>>>> ab9f6c96465b5f59abb4013770e39dde943cfa98
 class CustomUserViewSet(UserViewSet):
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
         serializer = CreateUser(data=request.data)
+<<<<<<< HEAD
         print (serializer)
         print (serializer.is_valid())
         if serializer.is_valid(raise_exception=True):
@@ -41,6 +45,14 @@ class CustomUserViewSet(UserViewSet):
                 user.is_staff = True
                 user.is_superuser = True
                 user.is_active = True
+=======
+        print(serializer)
+        print(request.data)
+        print(serializer.is_valid())
+        if serializer.is_valid(raise_exception=True):
+            user=serializer.save()
+            if user:
+>>>>>>> ab9f6c96465b5f59abb4013770e39dde943cfa98
                 #send_mail('OTP Code',# Send OTP code via email
                 #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
                 #[serializer.validated_data['email']],fail_silently=False,)
@@ -48,8 +60,12 @@ class CustomUserViewSet(UserViewSet):
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
+<<<<<<< HEAD
             return JsonResponse(serializer.errors,status=400)
 
+=======
+        return JsonResponse(serializer.errors,status=400)
+>>>>>>> ab9f6c96465b5f59abb4013770e39dde943cfa98
 
 class ActivateView(APIView):        
     serializer_class=OTPActivate

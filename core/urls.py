@@ -1,4 +1,4 @@
-from django.conf import settings
+from django.conf  import settings
 from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
@@ -20,12 +20,9 @@ public=True
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
-<<<<<<< HEAD
     path('', include('transactions.urls')),
     path('', include('userwallets.urls')),
     path('', include('payments_app.urls')),
-=======
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
     path('api/v1/', include('djoser.urls')),
     path('api/v1/', include('djoser.urls.authtoken')),
     path('swagger/schema/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

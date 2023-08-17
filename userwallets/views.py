@@ -26,41 +26,54 @@ class GetVirtualAcnView(APIView):
         if serializer.is_valid(raise_exception=True):
             try:
                 #thepeer_instance=Thepeer('')
-                user_id=serializers.validated_data['user_id']
-                bvn=serializers.validated_data['bvn']
+                user_id=serializer.validated_data['user_id']
+                bvn=serializer.validated_data['bvn']
                 user=UserProfile.objects.get(id=user_id)
                 email=user.email
                 #test=thepeer_instance.index_user(user,email,email)
                 #peers_s=json.loads(test)
-                date_of_birth=serializers.validated_data['d_o_b']
-                first_name=serializers.validated_data['first_name']
-                last_name=serializers.validated_data['last_name']
-                bank_name=serializers.validated_data['bank_name']
-                owner=WalletStats.objects.select_related('account').get(id=user_id)
+                #date_of_birth=serializer.validated_data['d_o_b']
+                first_name=serializer.validated_data['first_name']
+                last_name=serializer.validated_data['last_name']
+                bank_name=serializer.validated_data['bank_name']
+                owner=WalletStats.objects.get(owner=user)
+                currency="NGN"
                 #peer_ref=peers_s["reference"]
                 #owner.peer_ref=peer_ref
                 #owner.save()
-                headers={"accept":"application/json","content-type":"application/json",
-                "api-key":"giW6UPgKddYpfcYQgBaFnSn5kQVnt5R8"}
+                headers={
+                   "accept":"application/json",
+                   "content-type":"application/json",
+                   "api-key":"9k8NHNDPPEzCNxECBBE26XVF85jsv8tx"
+                }
                 gateway_url="https://sandboxapi.fincra.com/profile/virtual-accounts/requests/"
-                payload={"dateofBirth":date_of_birth,"accountType":'individual',"currency":currency,
-                "KYCInformation":{"firstName":first_name, "lastName":last_name, "bvn":bvn},"channel":bank_name}
-                payload_data=json.dumps(payload)
-                responses=requests.post(gateway_url,json=payload_data,headers=headers)
+                payload={
+                   "currency":currency,
+                   "accountType":'individual',
+                   "KYCInformation":{
+                      "firstName":first_name, 
+                      "lastName":last_name, 
+                      "bvn":bvn
+                   },
+                   "channel":bank_name
+                }
+                #payload_data=json.dumps(payload)
+                responses=requests.post(gateway_url,json=payload,headers=headers)
+                print(responses.json())
                
                 if responses.status_code == 200:
-                    wdata=responses.data
-                    stat=wdata.get('status')
-                    wid=wdata.get('_id')
-                    if stat == "approved":
-                        virtualacn=webhook_data.get("accountNummber")
-                        owner.virtual_acn=virtualacn
-                        owner.wallet_id=wid
-                        owner.save()
-                    else:
-                        return Response({'error':"unable to get account number"},status=status.HTTP_400_BAD_REQUEST)
+                    current=json.loads(responses.text)
+                    #print(current)
+                    wid=current['data']['_id']
+                    virtualacn=current['data']['accountInformation']['accountNumber']
+                    print(virtualacn)
+                    print(wid)
+                    owner.virtual_acn=virtualacn
+                    owner.wallet_id=wid
+                    owner.save()
+                    return JsonResponse({'detail': 'Account number and id saved successfully'}, status=200)
                 else:
-                    return Response({'error':"unable to get account number"},status=status.HTTP_400_BAD_REQUEST)
+                    return JsonResponse({'error':f"unable to get account number due to:{response.json()}"},status=400)
             except UserProfile.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user '}, status=400)
 
@@ -72,13 +85,13 @@ class GetAccountDetailsView(APIView):
     def get(self, request,user_id):
             try:
                 user=UserProfile.objects.get(id=user_id)
-                owner=WalletStats.objects.select_related('account').get(id=user_id)
-            except WalletStats.DoesNotExist:
+                owner=WalletStats.objects.get(owner=user)
+            except UserProfile.DoesNotExist:
                 return JsonResponse({'detail': 'Invalid user or not found '}, status=404)
-            serializer=GetAccountDetails(owner,many=True)
+            serializer=GetAccountDetails(owner)
             response_data={
                 'message':f'Account Details of {user}',
-                'transactions':serializer.data}
+                'Account':serializer.data}
             return JsonResponse(response_data,status=200)
 
 

@@ -49,8 +49,8 @@ class BankTransferView(APIView):
                 first_name,last_name=account_holder.split()
                 recp_amount= serializer.validated_data['amount']
                 new_amount=float(rec_amount)
-                transaction=Transactions.objects.select_related('account').get(id=user_id)
-                owner=WalletStats.objects.select_related('account').get(id=rec_id)
+                transaction=Transactions.objects.get(account=user)
+                owner=WalletStats.objects.get(owner=user)
                 available_balance=owner.balance
                 transfer_type= serializer.validated_data['transfer_type']
                 currency= serializer.validated_data[' currency']
@@ -117,10 +117,12 @@ class WalletTransferView(APIView):
             user=UserProfile.objects.get(id=user_id)
             recipient=UserProfile.objects.get(id=rec_id)
             bank_code="035"
-            owner=WalletStats.objects.select_related('account').get(id=rec_id)
+            owner2=WalletStats.objects.get(owner=recipient)
+            owner1=WalletStats.objects.get(owner=user)
             account_number=owner.virtual_acn
             email=user.email
-            transaction=Transactions.objects.select_related('account').get(id=user_id)
+            transaction=Transactions.objects.get(account=user)
+            transaction2=Transactions.objects.get(account=recipient)
             first_name,last_name=recipient.split()
             payload={
                 "business":business_id ,"sourceCurrency":currency ,
@@ -147,14 +149,20 @@ class WalletTransferView(APIView):
                     response=requests.post(gateway_url,json=payload_data,headers=headers)
                     if response == 200:
                         return JsonResponse({'detail': 'Transfer successful.'}, status=200)
-                        owner.balance-=new_amount
-                        owner.save()
+                        owner1.balance-=new_amount
+                        owner2.balance+=new_amount
+                        owner1.save()
+                        owner2.save()
                         transaction.status='success'
+                        transaction2.status='success'
                         transaction.save()
+                        transaction2.save()
                     else:
                         return JsonResponse({'detail':'transfer errors'}, status=400)
                         transaction.status='failed'
+                        transaction2.status='failed'
                         transaction.save()
+                        transaction2.save()
                         time.sleep(delay_retry)
                 else:
                     return JsonResponse({'detail': 'insufficient funds.'}, status=400)
@@ -218,8 +226,8 @@ class MobilePurchaseView(APIView):
                 user=UserProfile.objects.get(id=user_id)
                 email=user.email
                 new_amount=float(amount)
-                transaction=Transfers.objects.select_related('account').get(id=user_id)
-                owner=WalletStats.objects.select_related('account').get(id=user_id)
+                transaction=Transactions.objects.get(account=user)
+                owner=WalletStats.objects.get(owner=user)
                 payload={"amount":amount,"phone_no":phone_number,"telco":network_name,"reference":email}
                 payload_data=json.dumps(payload)
                 mobile=Mobile_TopUp.objects.create(
@@ -272,7 +280,7 @@ class Webhook(APIView):
         webhook_secret_key=''
         payload=request.data
         key = webhook_secret_key.encode('utf-8')
-        message=json.dumps(payload,separators(',',':').encode('utf-8'))
+        message=json.dumps(payload)
         encrypted_data=hmac.new(key,message,hashlib.sha512).hexdigest()
         signature=request.headers.get('signature')
         if signature == encrypted_data:
