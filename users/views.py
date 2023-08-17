@@ -16,10 +16,7 @@ from djoser import utils
 from djoser.compat import get_user_email
 from django.contrib.auth.hashers import make_password
 from drf_yasg.utils import swagger_auto_schema
-<<<<<<< HEAD
-=======
 from django.utils.decorators import method_decorator
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
 from djoser.views import UserViewSet,TokenDestroyView,TokenCreateView
 from .serializers import CreateUser,OTPActivate,OTPResend,SendOTPPasswordReset,PasswordResetConfirm,LoginSerializer
 from .models import UserProfile
@@ -31,23 +28,11 @@ global otp_secret,otp,otp_code
 otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
-<<<<<<< HEAD
-#@method_decorator(csrf_exempt,name='dispatch')
-=======
 @method_decorator(csrf_exempt, name='dispatch')
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
 class CustomUserViewSet(UserViewSet):
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
         serializer = CreateUser(data=request.data)
-<<<<<<< HEAD
-        print(serializer)
-        print(request.data)
-        print(serializer.is_valid())
-        if serializer.is_valid(raise_exception=True):
-            user=serializer.save()
-            if user:
-=======
         print (serializer)
         print (serializer.is_valid())
         if serializer.is_valid(raise_exception=True):
@@ -59,16 +44,11 @@ class CustomUserViewSet(UserViewSet):
                 #send_mail('OTP Code',# Send OTP code via email
                 #f'Your OTP code is: {otp_code}',settings.EMAIL_HOST_USER,
                 #[serializer.validated_data['email']],fail_silently=False,)
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
                 data={'detail': 'User created successfully. OTP code sent.',
                 'email':user.email,'id':user.id}
                 headers = self.get_success_headers(serializer.data)
                 return JsonResponse(data, status=201, headers=headers)
-<<<<<<< HEAD
-        return JsonResponse(serializer.errors,status=400)
-=======
             return JsonResponse(serializer.errors,status=400)
->>>>>>> 663b1ddadf92585f133e2ce04633ed7ec4960a80
 
 
 class ActivateView(APIView):        
