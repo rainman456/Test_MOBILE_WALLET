@@ -5,12 +5,12 @@ from .models import UserProfile
 from userwallets.models import WalletStats
 from transactions.models import *
 
-
+"""
 @receiver(post_save, sender=UserProfile)
 def create_user(sender, created, instance, *args, **kwargs):
     if created:
         Transactions.objects.create(account=instance)
-
+"""
 
 
 @receiver(post_save, sender=UserProfile)
