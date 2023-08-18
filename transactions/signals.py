@@ -5,6 +5,7 @@ from .models import Transactions,Deposits,Transfers,Mobile_TopUp
 @receiver(post_save, sender=Deposits)
 def create_deposit(sender, created, instance, *args, **kwargs):
     if created:
+        
         deposit_type='wallet_deposit'
         Transactions.objects.create(
             transaction_type=deposit_type,
