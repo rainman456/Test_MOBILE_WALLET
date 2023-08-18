@@ -278,20 +278,17 @@ class MobilePurchaseView(APIView):
 class Webhook(APIView):
     def process_webhook(self,payload,signature):
         webhook_secret_key='90c02a4ae9a34a938d87f2dda3ec5da8'
-        payload=request.data
         key = webhook_secret_key.encode('utf-8')
         message=json.dumps(payload,separators=(',',':')).encode("utf-8")
         encrypted_data=hmac.new(key,message,hashlib.sha512).hexdigest()
         signature=request.headers['signature']
         if signature == encrypted_data:
             print("Processing data:" , payload )
-            webhook_data=request.data
-            current=json.loads(webhook_data)
-            event=current["event"]
+            event=payload.get("event")
             if event == "collection.successful":
-                virtual_id= current["data"]["virtualAccount"]
-                amount=float(current["data"]["amountReceived"])
-                name=current["data"]["customerName"]
+                virtual_id= payload.get("data").get("virtualAccount")
+                amount=float(payload.get("data").get("amountReceived"))
+                name=payload.get("data").get("customerName")
                 owner=WalletStats.objects.get(wallet_id=virtual_id)
                 transaction_type='wallet_deposit'
                 account_number=owner.virtual_acn
@@ -304,45 +301,6 @@ class Webhook(APIView):
                     bank_account_number=account_number,
                     account=owner)
                 deposits.save()    
-                filename_3="webhook_Payins.csv"
-                column_labels3=['Account id','Status','Payin Currency','Timestap']
-                with open(filename_3,'a',newline='') as csvfile3:
-                    csv_writer3=csv.DictWriter(csvfile3,fieldnames=column_labels3)
-                    if csvfile3.tell==0:
-                        csv_writer3.writeheader()
-                    data_log3={
-                        'Account id':virtual_id,
-                        'Status':current["data"]["status"],
-                        'Payin Currency': current["data"]["destinationCurrency"],
-                        'Timestap':current["data"]["createdAt"]}
-                    csv_writer3.writerow(data_log3)
-            if event == "payout.successful":
-                filename2="webhook_Accounts.csv"
-                column_labels=['Account','id','Status','Currency','Timestap']
-                with open(filename2,'a',newline='') as csvfile:
-                    csv_writer=csv.DictWriter(csvfile,fieldnames=column_labels)
-                    if csvfile.tell==0:
-                        csv_writer.writeheader()
-                    data_log={
-                        'Account':current["data"]["reference"],
-                        'id':current["data"]["id"],
-                        'Status':current["data"]["status"],
-                        'Currency': current["data"]["sourceCurrency"],
-                        'Timestap':current["data"]["createdAt"]}
-                    csv_writer.writerow(data_log)
-            if event == "virtualaccount.approved":
-                filename3="webhook_Accounts.csv"
-                column_labels=['Account id','Status','Currency','Timestap']
-                with open(filename3,'a',newline='') as csvfile:
-                    csv_writer=csv.DictWriter(csvfile,fieldnames=column_labels)
-                    if csvfile.tell==0:
-                        csv_writer.writeheader()
-                    data_log={
-                        'Account id':current["data"]["id"],
-                        'Status':current["data"]["status"],
-                        'Currency':current["data"]["currency"],
-                        'Timestap':current["data"]["createdAt"]}
-                    csv_writer.writerow(data_log)
             return JsonResponse({'message': 'webhook processed.'}, status=200)
         else:
             print("Processing data:" , payload )
@@ -350,6 +308,7 @@ class Webhook(APIView):
     def post(self,request):
         payload=request.data
         signature=request.headers.get('signature')
+        return self.process_webhook(payload,signature)
     def get(self,request):
         payload=request.data
         signature=request.headers.get('signature')
