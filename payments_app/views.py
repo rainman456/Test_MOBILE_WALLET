@@ -343,7 +343,7 @@ class Webhook(APIView):
                         'Currency':current["data"]["currency"],
                         'Timestap':current["data"]["createdAt"]}
                     csv_writer.writerow(data_log)
-            return JsonResponse({'message': 'webhook processed.'}, status=200})
+            return JsonResponse({'message': 'webhook processed.'}, status=200)
         else:
             print("Processing data:" , payload )
             return Response({'error':"invalid signature"},status=status.HTTP_400_BAD_REQUEST)
