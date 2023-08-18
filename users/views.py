@@ -27,8 +27,9 @@ global otp_secret,otp,otp_code
 otp_secret= pyotp.random_base32()
 otp = pyotp.TOTP(otp_secret, digits=4)
 otp_code=otp.now()
-@method_decorator(csrf_exempt,name='dispatch')
+#@method_decorator(csrf_exempt,name='dispatch')
 class CustomUserViewSet(UserViewSet):
+    @swagger_auto_schema(request_body=CreateUser)
     serializer_class=CreateUser
     def create(self, request, *args, **kwargs):
         serializer = CreateUser(data=request.data)
