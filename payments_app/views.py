@@ -186,8 +186,7 @@ class EwalletTransferView(APIView):
         if serializer.is_valid(raise_exception=True):
             try:
 """
-
-
+"""
 class DepositsView(APIView):
     def update(self,ac_id,amount,name):
         transaction_type='wallet_deposit'
@@ -205,8 +204,7 @@ class DepositsView(APIView):
         deposits.save()
         transaction.status='success'
         transaction.save()
-
-
+"""
 
 """
 class EWalletDepositView(APIView):
@@ -297,8 +295,18 @@ class Webhook(APIView):
                 virtual_id= current["data"]["virtualAccount"]
                 amount=float(current["data"]["amountReceived"])
                 name=current["data"]["customerName"]
-                upate_view=DepositsView()
-                update_view.update(virtual_id,amount,name)
+                owner=WalletStats.objects.get(wallet_id=virtual_id)
+                transaction_type='wallet_deposit'
+                account_number=owner.virtual_acn
+                bank_name="Wema Bank"
+                owner.balance+=amount
+                owner.save()
+                deposits=Deposits.objects.create(
+                    deposit_type=transaction_type,
+                    amount=amount,creditor_name=name,
+                    bank_account_number=account_number,
+                    account=owner)
+                deposits.save()    
                 filename_3="webhook_Payins.csv"
                 column_labels3=['Account id','Status','Payin Currency','Timestap']
                 with open(filename_3,'a',newline='') as csvfile3:
