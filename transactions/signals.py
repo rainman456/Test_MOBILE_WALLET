@@ -19,14 +19,14 @@ def create_deposit(sender, created, instance, *args, **kwargs):
 def create_transfer(sender, created, instance, *args, **kwargs):
     if created:
         if instance.transfer_type=='bank_transfer':
-           transaction=Transactions.objects.create(
+            transaction=Transactions.objects.create(
                 transaction_type=instance.transfer_type,
                 account=instance.sender,
                 amount=instance.amount,
                 recipient=instance.recipient)
             return transaction
         elif instance.transfer_type=='wallet_transfer':
-           transaction=Transactions.objects.create(
+            transaction=Transactions.objects.create(
                 transaction_type=instance.transfer_type,
                 account=instance.sender,
                 amount=instance.amount,
