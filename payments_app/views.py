@@ -48,7 +48,7 @@ class BankTransferView(APIView):
                 user_id = serializer.validated_data['user_id']
                 user=UserProfile.objects.get(id=user_id)
                 email=user.email
-                business_id="64033e4d9fc454765ab40e84"
+                business_id="64033e4eaebea76e8e61ed03"
                 bank_name= serializer.validated_data['bank_name']
                 account_number= serializer.validated_data['bank_account_number']
                 account_holder= serializer.validated_data['account_holder']
@@ -120,7 +120,7 @@ class WalletTransferView(APIView):
             currency= serializer.validated_data[' currency']
             rec_amount= serializer.validated_data[' amount']
             new_amount=float(rec_amount)
-            business_id="64033e4d9fc454765ab40e84"
+            business_id="64033e4eaebea76e8e61ed03"
             user=UserProfile.objects.get(id=user_id)
             recipient=UserProfile.objects.get(id=rec_id)
             bank_code="035"
@@ -188,10 +188,12 @@ class EwalletTransferView(APIView):
 """
 """
 class DepositsView(APIView):
-    def update(self,ac_id,amount,name):
-        transaction_type='wallet_deposit'
-        wallet=get_object_or_404(WalletStats,wallet_id=ac_id)
-        transaction=Transactions.objects.filter(account=wallet.owner)
+    permission_classes = [IsAuthenticated]
+    def post(self,id):
+        try:
+            transaction_type='wallet_deposit'
+            user=UserProfile.objects.get(id=user_id)
+            wallet=WalletStats.objects.get(owner=user)
         acn_number=user_account.virtual_acn
         bank_name="Wema Bank"
         owner.balance+=amount
