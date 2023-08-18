@@ -276,7 +276,7 @@ class MobilePurchaseView(APIView):
 
 
 class Webhook(APIView):
-    def post(self,request):
+    def process_webhook(self,payload,signature):
         webhook_secret_key='90c02a4ae9a34a938d87f2dda3ec5da8'
         payload=request.data
         key = webhook_secret_key.encode('utf-8')
@@ -284,6 +284,7 @@ class Webhook(APIView):
         encrypted_data=hmac.new(key,message,hashlib.sha512).hexdigest()
         signature=request.headers['signature']
         if signature == encrypted_data:
+            print("Processing data:" , payload )
             webhook_data=request.data
             current=json.loads(webhook_data)
             event=current["event"]
@@ -341,9 +342,16 @@ class Webhook(APIView):
                         'Status':current["data"]["status"],
                         'Currency':current["data"]["currency"],
                         'Timestap':current["data"]["createdAt"]}
-                    csv_writer.writerow(data_log)              
+                    csv_writer.writerow(data_log)
+            return JsonResponse({'message': 'webhook processed.'}, status=200})
         else:
+            print("Processing data:" , payload )
             return Response({'error':"invalid signature"},status=status.HTTP_400_BAD_REQUEST)
-
-
-
+    def post(self,request):
+        payload=request.data
+        signature=request.headers.get('signature')
+    def get(self,request):
+        payload=request.data
+        signature=request.headers.get('signature')
+        return self.process_webhook(payload,signature)
+            
