@@ -77,7 +77,7 @@ class BankTransferView(APIView):
                     bank_name=bank_name,
                     recipient=account_holder)
                 transfer.save()
-                transaction=Transactions.objects.get(account=transfer.sender)
+                transaction=Transactions.objects.filter(account=transfer.sender)
                 if available_balance >= new_amount:
                     responses=requests.post(gateway_url,json=payload,headers=headers)
                     print(responses.json())
