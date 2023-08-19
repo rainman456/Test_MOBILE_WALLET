@@ -304,7 +304,7 @@ class Webhook(APIView):
                 deposits.save()    
             return JsonResponse({'message': 'webhook processed.'}, status=200)
         else:
-            print("Processing data:" , payload )
+            print("Processing data failed:" )
             return Response({'error':"invalid signature"},status=status.HTTP_400_BAD_REQUEST)
     def post(self,request):
         payload=request.data
