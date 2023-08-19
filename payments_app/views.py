@@ -279,7 +279,7 @@ class MobilePurchaseView(APIView):
 
 class Webhook(APIView):
     def process_webhook(self,payload,signature):
-        webhook_secret_key='90c02a4ae9a34a938d87f2dda3ec5da8'
+        webhook_secret_key='2f077283b5894700b2c98c9a3d43dd09'
         key = webhook_secret_key.encode('utf-8')
         message=json.dumps(payload,separators=(',',':')).encode("utf-8")
         encrypted_data= hmac.new(key,message,hashlib.sha512).hexdigest()
