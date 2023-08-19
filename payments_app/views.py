@@ -12,7 +12,6 @@ from .serializers import *
 from users.models import UserProfile
 from userwallets.models import WalletStats
 from transactions.models import Transactions,Deposits,Transfers,Mobile_TopUp
-from transactions.signals import create_transfer
 import requests
 import time
 import json
