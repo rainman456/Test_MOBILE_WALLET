@@ -55,7 +55,6 @@ class BankTransferView(APIView):
                 first_name,last_name=account_holder.split()
                 recp_amount= serializer.validated_data['amount']
                 new_amount=float(recp_amount)
-                #transaction=Transactions.objects.get(account=user)
                 owner=WalletStats.objects.get(owner=user)
                 available_balance=owner.balance
                 transfer_type='bank_transfer'
@@ -78,23 +77,21 @@ class BankTransferView(APIView):
                     bank_name=bank_name,
                     recipient=account_holder)
                 transfer.save()
+                transaction=Transactions.objects.get(account=user)
                 if available_balance >= new_amount:
-                    max_retry=5
-                    delay_retry=2
-                    for retry in range(max_retry):
-                        response=requests.post(gateway_url,json=payload,headers=headers)
-                        print(response.json())
-                        if response == 200:
-                            return JsonResponse({'detail': 'Transfer successful.'}, status=200)
-                            owner.balance-=new_amount
-                            owner.save()
-                            transaction.status='success'
-                            transaction.save()
-                        else:
-                            return JsonResponse({'detail':'transfer errors'}, status=400)
-                            transaction.status='failed'
-                            transaction.save()
-                            time.sleep(delay_retry)
+                    responses=requests.post(gateway_url,json=payload,headers=headers)
+                    print(responses.json())
+                    if responses.status_code == 200:
+                        return JsonResponse({'detail': 'Transfer successful.'}, status=200)
+                        owner.balance-=new_amount
+                        owner.save()
+                        transaction.status='success'
+                        transaction.save()
+                    else:
+                        return JsonResponse({'detail':'transfer errors'}, status=400)
+                        transaction.status='failed'
+                        transaction.save()
+                        time.sleep(delay_retry)
                 else:
                     return JsonResponse({'detail': 'insufficient funds.'}, status=400)
                     transaction.status='failed'
@@ -148,30 +145,27 @@ class WalletTransferView(APIView):
                 receiver=recipient)
             transfer.save()
             if available_balance >= new_amount:
-                max_retry=5
-                delay_retry=2
-                for retry in range(max_retry):
-                    print(response.json())
-                    response=requests.post(gateway_url,json=payload_data,headers=headers)
-                    if response == 200:
-                        return JsonResponse({'detail': 'Transfer successful.'}, status=200)
-                        owner1.balance-=new_amount
-                        owner2.balance+=new_amount
-                        owner1.save()
-                        owner2.save()
-                        transaction.status='success'
-                        transaction2.status='success'
-                        transaction.save()
-                        transaction2.save()
-                    else:
-                        return JsonResponse({'detail':'transfer errors'}, status=400)
-                        transaction.status='failed'
-                        transaction2.status='failed'
-                        transaction.save()
-                        transaction2.save()
-                        time.sleep(delay_retry)
+                responses=requests.post(gateway_url,json=payload_data,headers=headers)
+                print(responses.json())
+                if responses.status_code == 200:
+                    return JsonResponse({'detail': 'Transfer successful.'}, status=200)
+                    owner1.balance-=new_amount
+                    owner2.balance+=new_amount
+                    owner1.save()
+                    owner2.save()
+                    transaction.status='success'
+                    transaction2.status='success'
+                    transaction.save()
+                    transaction2.save()
                 else:
-                    return JsonResponse({'detail': 'insufficient funds.'}, status=400)
+                    return JsonResponse({'detail':'transfer errors'}, status=400)
+                    transaction.status='failed'
+                    transaction2.status='failed'
+                    transaction.save()
+                    transaction2.save()
+                    time.sleep(delay_retry)
+            else:
+                return JsonResponse({'detail': 'insufficient funds.'}, status=400)
 
         except UserProfile.DoesNotExist:
             return JsonResponse({'detail': 'Invalid user.'}, status=400)
