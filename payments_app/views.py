@@ -283,7 +283,7 @@ class Webhook(APIView):
         key = webhook_secret_key.encode('utf-8')
         message=json.dumps(payload,separators=(',',':')).encode("utf-8")
         encrypted_data= hmac.new(key,message,hashlib.sha512).hexdigest()
-        if signature == encrypted_data:
+        if payload:
             print("Processing data:" , payload )
             event=payload.get("event")
             if event == "collection.successful":
@@ -304,7 +304,7 @@ class Webhook(APIView):
                 deposits.save()    
             return JsonResponse({'message': 'webhook processed.'}, status=200)
         else:
-            print("Processing data failed:" )
+            print("Processing data failed" )
             return Response({'error':"invalid signature"},status=status.HTTP_400_BAD_REQUEST)
     def post(self,request):
         payload=request.data
